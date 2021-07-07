@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: restart-policy-pod
+spec:
+  #restartPolicy: Always  # default, always restart after stops, becomes unhealthy or terminates
+  restartPolicy: OnFailure  # only restart if becomes unhealthy
+  #restartPolicy: Never  # does not restart in any case
+  containers:
+  - name: busybox
+    image: busybox
+    command: ['sh', '-c', 'idonotexist'] # erroneus command to make pod restart

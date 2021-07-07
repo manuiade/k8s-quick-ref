@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: init-container-pod
+spec:
+  initContainers:  # run sequentially until conclusion before any container is started
+  - name: init1
+    image: busybox
+    command: ['sleep', '15']
+  - name: init2
+    image: busybox
+    command: ['sleep', '10']
+  containers:
+  - name: nginx
+    image: nginx:1.19.1

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-use-vol
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    command: ['sh', '-c', 'echo -e "configmap:\n`cat /etc/config/configmap/file.conf`\n\nsecret:\n`cat /etc/config/secret/password`"']
+    volumeMounts: # Each value is mounted as a separate file inside the mountPath
+    - name: configmap-volume
+      mountPath: /etc/config/configmap
+    - name: secret-volume
+      mountPath: /etc/config/secret
+  volumes:
+  - name: configmap-volume
+    configMap:
+      name: configmap
+  - name: secret-volume
+    secret:
+      secretName: secret

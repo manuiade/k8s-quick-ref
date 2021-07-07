@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap
+data:
+  key1: Value1
+  file.conf: | # multiple lines, for example for writing configuration files
+    File
+    Configuration

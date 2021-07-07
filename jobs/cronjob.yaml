@@ -1,0 +1,22 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: hello
+spec:
+  schedule: "* * * * *"
+  startingDeadlineSeconds: 3600  # Seconds loopback period
+  concurrencyPolicy: Forbid  # Don't start a new job is previous isn't over
+  #concurrencyPolicy: Allow  # Start other jobs concurrently
+  #concurrencyPolicy: Replace  # Replace new started job with old one
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: hello
+            image: busybox
+            args:
+            - /bin/sh
+            - -c
+            - date; echo "Hello, World!"
+          restartPolicy: OnFailure

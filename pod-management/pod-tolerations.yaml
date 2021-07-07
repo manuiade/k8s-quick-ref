@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: scheduled-nginx
+  labels:
+    app: scheduled-nginx
+spec:
+  containers:
+  - name: scheduled-nginx
+    image: nginx
+    imagePullPolicy: IfNotPresent
+  tolerations:
+  - key: "key1"
+    operator: "Equal"
+    value: "value1"
+    effect: "NoSchedule"
+  nodeSelector:
+    node-label: selected
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: unscheduled-nginx
+  labels:
+    app: unscheduled-nginx
+spec:
+  containers:
+  - name: unscheduled-nginx
+    image: nginx
+    imagePullPolicy: IfNotPresent
+  nodeSelector:
+    node-label: selected

@@ -1,0 +1,14 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: my-pv
+spec:
+  storageClassName: local-storage # can create a custom storage class
+  capacity:
+    storage: 1Gi  # how much storage request
+  accessModes:
+    #- ReadWriteOnce # no concurrently write or read
+    # - ReadOnlyMany  # concurrently reading
+    - ReadWriteMany # concurrently writing
+  hostPath:
+    path: "/tmp/data"

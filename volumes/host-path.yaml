@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: host-path-pod
+spec:
+  restartPolicy: Never
+  containers:
+  - name: busybox
+    image: busybox
+    command: ['sh', '-c', 'echo Writed locally! > /output/out.txt; sleep 3600']
+    volumeMounts:
+    - name: mydir
+      mountPath: /output
+    - name: myfile
+      mountPath: /output/out.txt
+  volumes:
+  - name: mydir
+    hostPath:
+      # Ensure the file directory is created.
+      path: /tmp/data
+      type: DirectoryOrCreate
+  - name: myfile
+    hostPath:
+      path: /tmp/data/out.txt
+      type: FileOrCreate

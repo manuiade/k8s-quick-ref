@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: startup-http-pod
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.19.1
+    startupProbe:
+      httpGet:
+        path: /
+        port: 80
+      failureThreshold: 30  # how many failures are allowed during startup before restarting pod
+      periodSeconds: 10  # how often kubelet performs the check

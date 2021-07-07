@@ -1,0 +1,21 @@
+apiVersion: autoscaling/v2beta2
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "nginx-hpa"
+  namespace: "default"
+  labels:
+    app: "nginx-deployment"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "nginx-deployment"
+    apiVersion: v1
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50

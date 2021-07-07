@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+spec:
+  storageClassName: local-storage
+  accessModes:
+    #- ReadWriteOnce # no concurrently write or read
+    # - ReadOnlyMany  # concurrently reading
+    - ReadWriteMany # concurrently writing
+  resources:
+    requests:
+      storage: 512Mi  # request from the persistent volume

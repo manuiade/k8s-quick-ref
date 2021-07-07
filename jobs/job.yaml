@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi-job
+spec:
+  completions: 3  # Create jobs until job controller receives 3 completed routines
+  parallelism: 2  # Hoe many jobs creates at the same time
+  backoffLimit: 4  # Number of pod fails before the job is completely considered failed
+  activeDeadlineSeconds: 300  # Seconds before a job is considered failed
+  ttlSecondsAfterFinished: 10 # Delete the jobs from the controller after it completes
+  template:
+    metadata:
+      name: pi-job
+    spec:
+      containers:
+      - name: pi
+        image: perl
+        command: ["perl"]
+        args: ["-Mbignum=bpi", "-wle", "print bpi(2000)"]
+      # Do not restart containers after they exit
+      restartPolicy: Never

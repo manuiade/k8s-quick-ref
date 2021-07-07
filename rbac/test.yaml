@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name:  allowed-ns
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: allowed-pod
+  namespace: allowed-ns
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.19.1
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name:  unallowed-ns
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: unallowed-pod
+  namespace: unallowed-ns
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.19.1

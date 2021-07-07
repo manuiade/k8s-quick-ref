@@ -1,0 +1,19 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: egress-net-policy
+spec:
+  policyTypes:
+  - Egress
+  podSelector:
+    matchLabels:
+      app: nginx
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: allowed
+  - to:
+    ports:
+    - protocol: UDP
+      port: 53
