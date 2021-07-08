@@ -8,12 +8,9 @@
 
 ## Roles
 
-Create users for testing:
+Create service accounts for testing:
 ```
-sudo useradd allowed-user
-sudo passwd allowed-user
-sudo useradd unallowed-user
-sudo passwd unallowed-user
+kubectl apply -f service-account.yaml
 ```
 
 Deploy pods in different namespaces:
@@ -21,8 +18,33 @@ Deploy pods in different namespaces:
 kubectl apply -f test.yaml
 ```
 
-Activate the role and clusterrole and verify pod listing from the 2 users created:
+Activate the role:
 ```
 kubectl apply -f role-binding.yaml
+```
+
+Verify pod listing as serviceaccount:
+```
+# This should work
+kubectl get pods -n rbac-ns --as=system:serviceaccount:rbac-ns:allowed-sa
+
+# This should not work
+kubectl get pods -n rbac-ns --as=system:serviceaccount:rbac:unallowed-sa
+
+# This should not work
+kubectl get pods -n default --as=system:serviceaccount:rbac-ns:allowed-sa
+```
+
+Activate the clusterrole:
+```
 kubectl apply -f cluster-role-binding.yaml
+```
+
+Now every service account should have get access to all namespaces:
+```
+# All should work
+kubectl get pods -n rbac-ns --as=system:serviceaccount:rbac-ns:allowed-sa
+kubectl get pods -n rbac-ns --as=system:serviceaccount:rbac-ns:unallowed-sa
+kubectl get pods -n default --as=system:serviceaccount:rbac-ns:allowed-sa
+kubectl get pods -n default --as=system:serviceaccount:rbac-ns:unallowed-sa
 ```
