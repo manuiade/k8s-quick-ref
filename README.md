@@ -12,36 +12,58 @@ services
 
 ## Kubectl cheat sheet
 
-### Basic pod operations
+### Cluster operations
+
+Show k8s API Server Info:
+```
+kubectl cluster-info
+```
+
+Check health of cluster components:
+```
+kubectl get componentstatuses
+```
+
+List all queryable resources:
+```
+kubectl api-resources
+```
+
+List all API versions:
+```
+kubectl api-versions
+```
 
 Setup kubectl bash autocompletion:
 ```
 source <(kubectl completion bash)
 ```
 
-Create a new k8s object from a manifest file:
+### Configuration and context
+
+View the current configuration:
 ```
-kubectl apply -f [MANIFEST.YAML]
+kubectl config current-context
 ```
 
-Get all current resources in a given namespace:
+View all context configurations:
 ```
-kubectl get pods -n [NAMESPACE] -o wide
-```
-
-Get info on a specific object in yaml format:
-```
-kubectl get pods <pod-name> -o yaml
+kubectl config view
 ```
 
-Get all queryable resources:
+Listing all contexts:
 ```
-kubectl api-resources
+kubectl config get-contexts
 ```
 
-Generate a manifest file without running the pods:
+Switch between contexts:
 ```
-kubectl create pod [POD_NAME] --image=nginx --dry-run=client -o yaml > pod.yml
+kubectl config use-context <CONTEXT_NAME>
+```
+
+Setting a default namespace for kubectl commands:
+```
+kubectl config set-context --current --namespace=NAMESPACE
 ```
 
 
@@ -59,7 +81,12 @@ kubectl label nodes <nodename> key=value
 
 Drain a node:
 ```
-kubectl drain <node-name> --ignore-daemonsets --force
+kubectl drain <node-name> --ignore-daemonsets --delete-local-data=true --force
+```
+
+Stop pod scheduling on the drained node:
+```
+kubectl cordon <nodename>
 ```
 
 Undrain a node:
@@ -82,7 +109,98 @@ Get all taints for each node:
 kubectl get nodes -o json | jq '.items[].spec.taints'
 ```
 
+
+### Basic pod operations
+
+Validate a yaml syntax:
+```
+kubectl create --dry-run --validate -f <file>.yaml
+```
+
+Create a new k8s object from a manifest file:
+```
+kubectl apply -f [MANIFEST.YAML]
+```
+
+Get all current resources in a given namespace:
+```
+kubectl get pods -n [NAMESPACE] -o wide
+```
+
+Get info on a specific object in yaml format:
+```
+kubectl get pods <pod-name> -o yaml
+```
+
+Generate a manifest file without running the pods:
+```
+kubectl create pod [POD_NAME] --image=nginx --dry-run=client -o yaml > pod.yml
+```
+
+Start a temporary pod which dies on exit:
+```
+kubectl run --rm -it --image=alpine alpine -- sh
+```
+
+Delete a pod (or every other k8s object):
+```
+kubectl delete pod <podname>
+```
+
+Get environment variables inside a Pod:
+```
+kubectl exec <podname> -- env
+```
+
+Copy from host to pod (and viceversa):
+```
+kubectl cp /local/file <podname>:/pod/path
+```
+
+Get resources sorted by name:
+```
+kubectl get pods --sort-by=.metadata.name
+```
+
+
+### Pods exploration
+
+Enter in a pod and launch a cloud shell:
+```
+kubectl exec -it [POD-NAME] -- /bin/bash
+```
+
+Port forward to a pod:
+```
+kubectl port-forward [POD-NAME] [LOCALHOST_PORT]:[CONTAINER_PORT]
+```
+
+Show logs for given pod:
+```
+kubectl logs [POD-NAME]
+```
+
+Show logs in realtime:
+```
+kubectl logs <podname> -f
+```
+
+Get top pods based on CPU utilization:
+```
+kubectl top pod --sort-by='cpu'
+```
+
 ### Deployments
+
+Create a nginx deployment:
+```
+kubectl create deployment nginx --image=nginx  --replicas=3
+```
+
+Expose a deployment using a service:
+```
+kubectl expose deployment nginx --port=80 --type=NodePort
+```
 
 Manually scale deployment:
 ```
@@ -119,22 +237,6 @@ Rolling back to a previous revision
 kubectl rollout undo deployment nginx-deployment --to-revision=1
 ```
 
-### Pods exploration
-
-Enter in a pod and launch a cloud shell:
-```
-kubectl exec -it [POD-NAME] -- /bin/bash
-```
-
-Port forward to a pod:
-```
-kubectl port-forward [POD-NAME] [LOCALHOST_PORT]:[CONTAINER_PORT]
-```
-
-Show logs for given pod:
-```
-kubectl logs [POD-NAME]
-```
 
 ### Configmaps and secrets
 
@@ -150,23 +252,41 @@ kubectl create configmap [CM] --from-literal=key1=value1 --from-literal=key2=val
 
 Decode a secret:
 ```
-kubectl get secret [SECRET -o jsonpath='{.data}'
+kubectl get secret [SECRET] -o jsonpath='{.data}'
 ```
 
-### Configuration and context
+### Create resources from kubectl
 
-View the current configuration:
+Create namespace:
 ```
-kubectl config current-context
-```
-
-View all context configurations:
-```
-kubectl config view
+kubectl create namespace <namespace>
 ```
 
-Setting a default namespace for kubectl commands:
+Create service account:
 ```
-kubectl config set-context --current --namespace=NAMESPACE
+kubectl create sa <serviceaccountname>
 ```
 
+### DNS Debugging
+
+Start a DNS pod:
+```
+kubectl apply -f https://k8s.io/examples/admin/dns/dnsutils.yaml
+```
+
+Running nslookup:
+```
+kubectl exec -i -t dnsutils -- nslookup <dns-entry>
+```
+
+Check if coredns is running on cluster:
+```
+kubectl get pods --namespace=kube-system -l k8s-app=kube-dns
+```
+
+Verify if DNS endpoints are exposed:
+```
+kubectl get endpoints kube-dns --namespace=kube-system
+```
+
+### Avanced commands
