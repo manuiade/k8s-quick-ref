@@ -5,7 +5,7 @@ metadata:
 spec:
   type: LoadBalancer
   #externalTrafficPolicy: local  # kube-proxy only selects pods inside the node
-  #loadBalancerIP: 10.10.10.10
+  #loadBalancerIP: 10.10.10.10  # You can specify the load balancer IP you want to assign
   selector:
     name: nginx
   ports:

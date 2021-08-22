@@ -21,7 +21,7 @@ spec:
   hostname: dns-demo-1
   subdomain: dns-demo
   containers:
-  - name: nginx
+  - name: nginx-1
     image: nginx
 ---
 apiVersion: v1
@@ -34,9 +34,5 @@ spec:
   hostname: dns-demo-2
   subdomain: dns-demo
   containers:
-  - name: nginx
+  - name: nginx-2
     image: nginx
-
-
-# Ping from one pod to another
-# ping dns-demo-2.dns-demo.default.svc.cluster.local
