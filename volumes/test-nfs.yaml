@@ -1,0 +1,43 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: nfs-pv
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  storageClassName: "nfs"
+  nfs:
+    path: /path # NFS PATH
+    server: <IP> # YOUR NFS IP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: "nfs"
+  volumeName: nfs-pv
+  resources:
+    requests:
+      storage: 10Gi
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: nfs-pod
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    command: ["/bin/sh", "-c", "cat /nfs/test"]
+    volumeMounts:
+    - mountPath: "/nfs"
+      name: nfs-test
+  volumes:
+  - name: nfs-test
+    persistentVolumeClaim:
+      claimName: nfs-pvc
