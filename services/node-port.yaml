@@ -10,4 +10,4 @@ spec:
   - protocol: TCP
     port: 80
     targetPort: 8080
-    nodePort: 30100  # Port from Node IP to communicate with Cluster IP
+    nodePort: 30100  # Port from Node IP to communicate with Cluster IP (must be in range 30000-32768)

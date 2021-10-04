@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: hello
 spec:
-  schedule: "* * * * *"
+  schedule: "* * * * *"  # Same syntax as linux cronjobs
   startingDeadlineSeconds: 3600  # Seconds loopback period
   concurrencyPolicy: Forbid  # Don't start a new job is previous isn't over
   #concurrencyPolicy: Allow  # Start other jobs concurrently
