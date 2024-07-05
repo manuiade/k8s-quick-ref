@@ -1,0 +1,12 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: edit-plus-token
+  labels:
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+# When you create the "monitoring-endpoints" ClusterRole,
+# the rules below will be added to the "monitoring" ClusterRole.
+rules:
+- apiGroups: [""]
+  resources: ["token"]
+  verbs: ["get"]
