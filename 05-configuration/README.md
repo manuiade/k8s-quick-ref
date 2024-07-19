@@ -1,4 +1,4 @@
-# Pod configuration
+# Configuration
 
 - https://kubernetes.io/docs/concepts/configuration/configmap/
 
