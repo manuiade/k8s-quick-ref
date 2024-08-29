@@ -1,9 +1,5 @@
 # Deployments
 
-- https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
-
-- https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/
-
 ## Basic Commands
 
 Create a nginx deployment:
@@ -163,3 +159,8 @@ Scale normal deployment to send to canary only small percentage of traffic:
 kubectl scale deployment normal-deployment --replicas=10
 ```
 
+## References
+
+- https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+
+- https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/

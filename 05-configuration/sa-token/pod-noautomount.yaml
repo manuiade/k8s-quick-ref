@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-noautomount
+spec:
+  serviceAccountName: build-robot
+  automountServiceAccountToken: false
+  containers:
+  - name: busybox
+    image: busybox
+    command: ['sh', '-c', 'cat /var/run/secrets/kubernetes.io/serviceaccount/token']

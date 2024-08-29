@@ -9,6 +9,6 @@ spec:
     command: ['sh', '-c', 'while true; do sleep 3600; done']
     livenessProbe:
       exec:
-        command: ["echo", "Hello, world!"]
+        command: ["echo", "Hello, world!"] # disgnostic is successfull if commands exits with code 0
       initialDelaySeconds: 5  # how much wait before performing the first check
       periodSeconds: 5  # how often kubelet performs the check

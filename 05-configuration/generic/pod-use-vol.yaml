@@ -6,7 +6,7 @@ spec:
   containers:
   - name: busybox
     image: busybox
-    command: ['sh', '-c', 'echo -e "configmap:\n`cat /etc/config/configmap/file.conf`\n\nsecret:\n`cat /etc/config/secret/password`"']
+    command: ['sh', '-c', 'echo -e "configmap:\n`cat /etc/config/configmap/game.properties`\n\nsecret:\n`cat /etc/config/secret/password`"']
     volumeMounts: # Each value is mounted as a separate file inside the mountPath
     - name: configmap-volume
       mountPath: /etc/config/configmap
@@ -16,6 +16,12 @@ spec:
   - name: configmap-volume
     configMap:
       name: configmap
+      items:
+      - key: "game.properties"
+        path: "game.properties"
+      - key: "user-interface.properties"
+        path: "user-interface.properties"
   - name: secret-volume
     secret:
       secretName: secret
+      optional: true # kubernetes ignores secret mount if it does not exist

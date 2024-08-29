@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: Pod
-metadata:
-  name: nodename-pod
-spec:
-  nodeName: <node name>  # kubescheduler will deploy the pod on the specified node
-  containers:
-  - name: nginx
-    image: nginx:1.19.1

@@ -12,7 +12,7 @@ spec:
         valueFrom:
           configMapKeyRef:
             name: configmap
-            key: key1
+            key: player_initial_lives
       - name: SECRETVAR
         valueFrom:
           secretKeyRef:
