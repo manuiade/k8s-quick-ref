@@ -1,0 +1,23 @@
+# This example ensure that pod hobby is preferred to be placed in the same node where there are running pods with label level=restricted
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    level: hobby
+  name: hobby-project
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+  affinity:
+    podAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: level
+              operator: In
+              values:
+              - restricted
+          topologyKey: kubernetes.io/hostname

@@ -18,7 +18,7 @@ spec:
   volumes:
   - name: message-volume
     hostPath:
-      path: /etc/message
+      path: /tmp/message
 ---
 apiVersion: v1
 kind: Pod
@@ -40,4 +40,4 @@ spec:
   volumes:
   - name: message-volume
     hostPath:
-      path: /etc/message
+      path: /tmp/message

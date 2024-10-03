@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-oom
+spec:
+  selector:
+    matchLabels:
+      app: pod-oom
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: pod-oom
+    spec:
+      containers:
+      - name: pod-oom
+        image: containerstack/cpustress
+        args: ["--vm-bytes", "1G", "--vm", "100", "-b", "1000000"]
+        # Uncomment for test
+        resources:
+          limits:
+            memory: "1Gi"

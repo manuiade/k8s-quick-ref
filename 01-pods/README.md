@@ -144,10 +144,10 @@ sudo groupadd -g 3001 unallowed-group
 Create a privileged file and creates pods with different security contexts mounting them:
 
 ```bash
-sudo mkdir -p /etc/message/
-echo "I have permission to read this!" | sudo tee -a /etc/message/message.txt
-sudo chown 2000:3000 /etc/message/message.txt
-sudo chmod 640 /etc/message/message.txt
+sudo mkdir -p /tmp/message/
+echo "I have permission to read this!" | sudo tee -a /tmp/message/message.txt
+sudo chown 2000:3000 /tmp/message/message.txt
+sudo chmod 640 /tmp/message/message.txt
 
 kubectl apply -f pod-management/security-context.yaml
 ```
@@ -186,6 +186,64 @@ kubectl apply -f pod-management/pod-tolerations.yaml
 kubectl get pods -o wide
 ```
 
+## Resource Quotas
+
+Install metrics server as a prerequisites:
+
+```bash
+kubectl apply -f metrics-server.yaml
+```
+
+Creates deployment which requests 100m vCPU:
+
+```bash
+kubectl apply -f pod-management/cpu-1.yaml
+```
+
+Check CPU usage:
+
+```bash
+watch -n 1 kubectl top pods -n test-quota
+```
+
+Creates other deployments with double and triple requests and check how entire CPU of the namespace is allocated
+
+```bash
+kubectl apply -f pod-management/cpu-2-3.yaml
+watch -n 1 kubectl top pods -n test-quota
+```
+
+[DON'T DO IT AT HOME] Start pod which will OOM VM:
+
+```bash
+kubectl apply -f pod-management/oom-pod.yaml
+watch -n 1 kubectl top pods
+kubectl delete -f pod-management/oom-pod.yaml
+```
+
+Apply memory limits and test again (notice pod eviction):
+
+```bash
+kubectl apply -f oom-pod.yaml
+watch -n 1 kubectl top pods
+kubectl delete -f oom-pod.yaml
+```
+
+## Priority and Preemption
+
+Apply priority classes and creates pods:
+
+```bash
+kubectl apply -f pod-management/priority-classes.yaml
+kubectl apply -f pod-management/pod-priorities.yaml
+```
+
+Get pod priorities in a namespace:
+
+```bash
+kubectl get pods -o custom-columns=NAME:.metadata.name,PRIORITY:.spec.priorityClassName,VALUE:.spec.priority
+```
+
 ## References
 
 - https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
@@ -206,4 +264,4 @@ kubectl get pods -o wide
 
 - https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
 
-- https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+- https://kubernetes.io/docs/concepts/policy/resource-quotas/

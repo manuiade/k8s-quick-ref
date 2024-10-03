@@ -1,0 +1,30 @@
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: low-priority
+value: 500
+globalDefault: false
+preemptionPolicy: Never # These low priority pods will never preempt any other pod even with low priorities
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: medium-priority
+value: 5000
+globalDefault: false
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: high-priority
+value: 50000
+globalDefault: false
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: default-priority
+value: 1000
+globalDefault: true # applied to the entire system
+preemptionPolicy: PreemptLowerPriority # Default behavior
+description: "Applied to the entire system"

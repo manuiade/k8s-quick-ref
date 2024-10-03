@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: low-nginx
+  labels:
+    app: low-nginx
+spec:
+  containers:
+  - name: low-nginx
+    image: nginx
+  priorityClassName: low-priority
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: medium-nginx
+  labels:
+    app: medium-nginx
+spec:
+  containers:
+  - name: medium-nginx
+    image: nginx
+  priorityClassName: medium-priority
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: high-nginx
+  labels:
+    app: high-nginx
+spec:
+  containers:
+  - name: high-nginx
+    image: nginx
+  priorityClassName: high-priority
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: default-nginx
+  labels:
+    app: default-nginx
+spec:
+  containers:
+  - name: default-nginx
+    image: nginx

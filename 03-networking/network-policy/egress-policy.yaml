@@ -13,6 +13,7 @@ spec:
     - podSelector:
         matchLabels:
           app: allowed
+  ## Allow all DSS egress traffic
   - to:
     ports:
     - protocol: UDP

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cpu-2x
+  namespace: test-quota
+spec:
+  selector:
+    matchLabels:
+      app: cpu-2x
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: cpu-2x
+    spec:
+      containers:
+      - name: cpu-2x
+        image: containerstack/cpustress
+        args: ["--cpu", "8"]
+        resources:
+          requests:
+            cpu: "200m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cpu-3x
+  namespace: test-quota
+spec:
+  selector:
+    matchLabels:
+      app: cpu-3x
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: cpu-3x
+    spec:
+      containers:
+      - name: cpu-3x
+        image: containerstack/cpustress
+        args: ["--cpu", "8"]
+        resources:
+          requests:
+            cpu: "300m"
