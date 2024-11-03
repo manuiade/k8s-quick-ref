@@ -21,6 +21,12 @@ Get all current resources in a given namespace:
 kubectl get pods -n [NAMESPACE] -o wide
 ```
 
+Get pod info in matching a specific label
+
+```bash
+kubectl get pods -n [NAMESPACE] -l key1=value1,key2=value2
+```
+
 Get info on a specific object in yaml format:
 
 ```bash
@@ -82,7 +88,7 @@ Show logs for given pod:
 
 ```bash
 kubectl logs [POD-NAME]
-```
+```the pod 
 
 Show logs in realtime:
 
@@ -129,30 +135,6 @@ Delete a pod overriding the default (30s) grace period seconds:
 ```bash
 kubectl delete pod [POD] --grace-period=0
 ```
-
-## Security Context
-
-Create user and groups for testing:
-
-```bash
-sudo useradd -u 2000 allowed-user
-sudo groupadd -g 3000 allowed-group
-sudo useradd -u 2001 unallowed-user
-sudo groupadd -g 3001 unallowed-group
-```
-
-Create a privileged file and creates pods with different security contexts mounting them:
-
-```bash
-sudo mkdir -p /tmp/message/
-echo "I have permission to read this!" | sudo tee -a /tmp/message/message.txt
-sudo chown 2000:3000 /tmp/message/message.txt
-sudo chmod 640 /tmp/message/message.txt
-
-kubectl apply -f pod-management/security-context.yaml
-```
-
-Verify file access works for first pod and not for second one
 
 ## Node selector
 

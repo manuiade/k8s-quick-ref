@@ -95,6 +95,55 @@ kubectl apply -f docker-config/
 
 ## TLS Secrets
 
+## Secret Encryption at Rest
+
+Create a sample secret and get its value:
+
+```bash
+kubectl create secret generic supersecret --from-literal key=supersecret
+kubectl get secret supersecret -o yaml
+```
+
+Get secret data directly from etcd server:
+
+```bash
+ETCDCTL_API=3 etcdctl \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key \
+  get /registry/secrets/default/supersecret | hexdump -C
+```
+
+Check if encryption at rest is enabled in kube-apiserver:
+
+```bash
+ps aux | grep kube-apiserver | grep encryption-provider-config
+```
+
+Apply encryption configuration creating an encryption key:
+
+```bash
+head -c 32 /dev/urandom | base64
+
+# Add to kube-apiserver argument the following: --encryption-provider-config=/path/to/encryption-config.yaml
+# Restart kube-apiserver
+```
+
+Verify encryption works:
+
+```bash
+kubectl create secret generic supersecret2 --from-literal key=supersecret2
+
+ETCDCTL_API=3 etcdctl \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key \
+  get /registry/secrets/default/supersecret2 | hexdump -C
+
+# If you update an existing secret it will be encrypted
+```
+
+
 ## References
 
 - https://kubernetes.io/docs/concepts/configuration/configmap/

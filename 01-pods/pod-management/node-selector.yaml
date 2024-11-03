@@ -3,7 +3,7 @@ kind: Pod
 metadata:
   name: nodeselector-pod
 spec:
-  # nodeName: <node name>  # kubescheduler will deploy the pod on the specified node
+  # nodeName: <node name>  # pod will be deployed on the specified node without leveraging kube-scheduler
   nodeSelector:
     node-label: selected 
   containers:
