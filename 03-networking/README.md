@@ -1,6 +1,5 @@
 # Networking
 
-
 ## Network Namespaces
 
 Create network namespaces:
@@ -160,67 +159,67 @@ kubectl get svc
 curl 192.168.178.2:32061
 ```
 
-### Call pod from other pod
+Call pod from other pod
 
-```
+```bash
 kubectl get pods -o wide
 kubectl exec -it nginx-7f456874f4-5xc59 -- /bin/bash
 # call other pod IP
 curl http://10.244.182.2
 ```
 
-### Capture network packets with tshark (from node with pod making the call)
+Capture network packets with tshark (from node with pod making the call)
 
-```
+```bash
 tshark -i wlan0 -V -Y "http"
 curl http://10.244.182.2
 ```
 
-### Note in the packet there will be 2 IP header nested (the one internal with the tunl0 IP source and dest pod IP)
+Note in the packet there will be 2 IP header nested (the one internal with the tunl0 IP source and dest pod IP)
 
 
 ### Calicoctl
-```
+
+Install calicoctl:
+
+```bash
 curl -L https://github.com/projectcalico/calico/releases/latest/download/calicoctl-linux-amd64 -o calicoctl
 chmod +x ./calicoctl
 export DATASTORE_TYPE=kubernetes
 export KUBECONFIG=./kube/config
 ```
 
-### Get info on IpPool for network configuration (IP-in-IP)
-```
+Get info on IpPool for network configuration (IP-in-IP)
+
+```bash
 calicoctl get workloadendpoints --allow-version-mismatch
 calicoctl get ipPool
 calicoctl get ipPool default-ipv4-ippool -o yaml > ippool.yaml
 ```
 
-### Watch route for modifications
-```
+Watch route for modifications:
+
+```bash
 watch route -n
 ```
 
-### Change the ipipMode to Never (from Always)
+Change the ipipMode to Never (from Always)
 
-```
+```bash
 calicoctl apply -f ippool.yaml
 ```
 
-### Note tunl0 route changing to wlan0
+Note tunl0 route changing to wlan0
 
+Retry a tshark inspection and note that there is no encapsulation with ip-in-ip
 
-### Retry a tshark inspection and note that there is no encapsulation with ip-in-ip
+Call pod from other pod:
 
-### Call pod from other pod
-
-```
+```bash
 kubectl exec -it nginx-7f456874f4-5xc59 -- /bin/bash
 tshark -i wlan0 -V -Y "http"
 curl http://10.244.182.2
 ```
-
-
-iptables -L -t nat | grep db-service
-
 
 
 ## Services

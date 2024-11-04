@@ -79,8 +79,6 @@ kubectl config set-context --current --namespace=NAMESPACE
 
 ## Nodes operations
 
-## Nodes
-
 Get node info:
 
 ```bash
