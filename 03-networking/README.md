@@ -271,7 +271,23 @@ kubectl exec -it busybox-allowed -- wget -qO- --timeout=5 nginx
 kubectl exec -it busybox-unallowed -- wget -qO- --timeout=5 nginx
 ```
 
-## CoreDNS [TODO]
+## DNS [WIP]
+
+Procedure to change service IPs and DNS Servers for cluster:
+
+```bash
+# Change the services CIDR from kube-apiserver service and restart
+
+# Change the clusterIP from the current kube-dns service and replace it
+
+# Change the clusterIP range from kubelet configuration at /var/lib/kubelet/config.yaml (clusterIPs)
+# and from kubelet-config cm (clusterDNS) and restart services on nodes where pods are running
+kubeadm upgrade node phase kubelet-config
+systemctl daemon-reload
+systemctl restart kubelet
+
+# Start a new pod and ensure that its /etc/resolv.conf file point to new DNS server
+```
 
 ## Kube Proxy
 

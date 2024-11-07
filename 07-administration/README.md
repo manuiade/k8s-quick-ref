@@ -73,8 +73,20 @@ kubectl config use-context <CONTEXT_NAME>
 
 Setting a default namespace for kubectl commands:
 
-``` bash
+```bash
 kubectl config set-context --current --namespace=NAMESPACE
+```
+
+Setting new credentials for a context:
+
+```bash
+kubectl config set-credentials <USER> --client-key=KEY.key --client-certificate=CRT.crt --embed-certs 
+```
+
+Setting new context for new user and cluster:
+
+```bash
+kubectl config set-context <CONTEXT_NAME> --user <USER> --cluster <CLUSTER>
 ```
 
 ## Nodes operations
@@ -314,6 +326,27 @@ sudo apt-mark hold kubelet
 systemctl daemon-reload
 systemctl restart kubelet
 kubectl uncordon node-1
+```
+
+## More Kubeadm commands
+
+Get bootstrap token to join nodes or generate new one:
+
+```bash
+kubeadm token list
+kubeadm token create
+```
+
+Check certificate expirations:
+
+```bash
+kubeadm certs check-expiration
+```
+
+Renew a certificate:
+
+```bash
+kubeadm certs renew all
 ```
 
 ## Extra

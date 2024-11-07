@@ -60,6 +60,12 @@ kubectl get nodes -o=custom-columns=NODE:.metadata.name,CPU:.status.capacity.cpu
 kubectl get pv --sort-by=.spec.capacity.storage -o custom-columns=NAME:.metadata.name,CAPACITY:.spec.capacity.storage
 ```
 
+## Other used commands
+
+```bash
+
+```
+
 ## References
 
 - https://kubernetes.io/docs/concepts/workloads/controllers/job/
